@@ -86,12 +86,17 @@ public class ExtraPaletteBlock {
                 // in case the View's in a Drawer
                 view = eC.c("_drawer_" + xmlName, logicEditor.id);
             }
-            String customView = view.customView;
-            if (customView != null && !customView.isEmpty()) {
-                for (ViewBean viewBean : jC.a(sc_id).d(ProjectFileBean.getXmlName(customView))) {
-                    if (viewBean.getClassInfo().a(str)) {
-                        mapSave.put(str, true);
-                        return true;
+            if (view != null) {
+                String customView = view.customView;
+                if (customView != null && !customView.isEmpty()) {
+                    var customViewBeans = jC.a(sc_id).d(ProjectFileBean.getXmlName(customView));
+                    if (customViewBeans != null) {
+                        for (ViewBean viewBean : customViewBeans) {
+                            if (viewBean.getClassInfo().a(str)) {
+                                mapSave.put(str, true);
+                                return true;
+                            }
+                        }
                     }
                 }
             }
@@ -253,20 +258,27 @@ public class ExtraPaletteBlock {
                 // Event is of a Drawer View
                 viewBean = eC.c("_drawer_" + xmlName, viewId);
             }
+
+            if (viewBean == null) {
+                return;
+            }
+
             String viewBeanCustomView = viewBean.customView;
             if (viewBeanCustomView != null && !viewBeanCustomView.isEmpty()) {
                 ArrayList<ViewBean> customViews = jC.a(sc_id).d(ProjectFileBean.getXmlName(viewBeanCustomView));
-                for (int i = 0, customViewsSize = customViews.size(); i < customViewsSize; i++) {
-                    ViewBean customView = customViews.get(i);
+                if (customViews != null) {
+                    for (int i = 0, customViewsSize = customViews.size(); i < customViewsSize; i++) {
+                        ViewBean customView = customViews.get(i);
 
-                    if (i == 0) {
-                        logicEditor.a("Custom Views", getTitleBgColor());
-                    }
+                        if (i == 0) {
+                            logicEditor.a("Custom Views", getTitleBgColor());
+                        }
 
-                    if (!customView.convert.equals("include")) {
-                        String typeName = customView.convert.isEmpty() ? ViewBean.getViewTypeName(customView.type) : IdGenerator.getLastPath(customView.convert);
-                        String resultId = isViewBindingEnabled ? "binding." + ViewBindingBuilder.generateParameterFromId(customView.id) : customView.id;
-                        logicEditor.a(resultId, "v", typeName, "getVar").setTag(resultId);
+                        if (!customView.convert.equals("include")) {
+                            String typeName = customView.convert.isEmpty() ? ViewBean.getViewTypeName(customView.type) : IdGenerator.getLastPath(customView.convert);
+                            String resultId = isViewBindingEnabled ? "binding." + ViewBindingBuilder.generateParameterFromId(customView.id) : customView.id;
+                            logicEditor.a(resultId, "v", typeName, "getVar").setTag(resultId);
+                        }
                     }
                 }
             }
@@ -278,18 +290,20 @@ public class ExtraPaletteBlock {
             return;
         }
         ArrayList<ViewBean> views = jC.a(sc_id).d(xmlName);
-        for (int i = 0, viewsSize = views.size(); i < viewsSize; i++) {
-            ViewBean view = views.get(i);
-            Set<String> toNotAdd = new Ox(new jq(), projectFile).readAttributesToReplace(view);
+        if (views != null) {
+            for (int i = 0, viewsSize = views.size(); i < viewsSize; i++) {
+                ViewBean view = views.get(i);
+                Set<String> toNotAdd = new Ox(new jq(), projectFile).readAttributesToReplace(view);
 
-            if (i == 0) {
-                logicEditor.a("Views", getTitleBgColor());
-            }
+                if (i == 0) {
+                    logicEditor.a("Views", getTitleBgColor());
+                }
 
-            if (!view.convert.equals("include")) {
-                if (!toNotAdd.contains("android:id")) {
-                    String typeName = view.convert.isEmpty() ? ViewBean.getViewTypeName(view.type) : IdGenerator.getLastPath(view.convert);
-                    logicEditor.a(isViewBindingEnabled ? "binding." + ViewBindingBuilder.generateParameterFromId(view.id) : view.id, "v", typeName, "getVar").setTag(isViewBindingEnabled ? "binding." + ViewBindingBuilder.generateParameterFromId(view.id) : view.id);
+                if (!view.convert.equals("include")) {
+                    if (!toNotAdd.contains("android:id")) {
+                        String typeName = view.convert.isEmpty() ? ViewBean.getViewTypeName(view.type) : IdGenerator.getLastPath(view.convert);
+                        logicEditor.a(isViewBindingEnabled ? "binding." + ViewBindingBuilder.generateParameterFromId(view.id) : view.id, "v", typeName, "getVar").setTag(isViewBindingEnabled ? "binding." + ViewBindingBuilder.generateParameterFromId(view.id) : view.id);
+                    }
                 }
             }
         }
