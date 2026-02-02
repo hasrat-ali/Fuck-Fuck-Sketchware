@@ -318,7 +318,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         View a2 = wB.a(this, R.layout.logic_popup_add_list);
         RadioGroup radioGroup = a2.findViewById(R.id.rg_type);
         TextInputEditText editText = a2.findViewById(R.id.ed_input);
-        ZB zb = new ZB(getContext(), a2.findViewById(R.id.ti_input), uq.b, uq.a(), jC.a(scId).a(M));
+        ZB zb = new ZB(this, a2.findViewById(R.id.ti_input), uq.b, uq.a(), jC.a(scId).a(M));
         dialog.setView(a2);
         dialog.setPositiveButton(R.string.common_word_add, (v, which) -> {
             if (zb.b()) {
@@ -347,7 +347,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         View customView = wB.a(this, R.layout.logic_popup_add_variable);
         RadioGroup radioGroup = customView.findViewById(R.id.rg_type);
         TextInputEditText editText = customView.findViewById(R.id.ed_input);
-        ZB nameValidator = new ZB(getContext(), customView.findViewById(R.id.ti_input), uq.b, uq.a(), jC.a(scId).a(M));
+        ZB nameValidator = new ZB(this, customView.findViewById(R.id.ti_input), uq.b, uq.a(), jC.a(scId).a(M));
         dialog.setView(customView);
         dialog.setPositiveButton(R.string.common_word_add, (v, which) -> {
             int variableType = 1;
@@ -402,7 +402,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
                             l(Helper.getText(radioButton));
                         }
                     }
-                    Toast.makeText(getContext(), R.string.logic_editor_message_currently_used_list, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logic_editor_message_currently_used_list, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 i++;
@@ -435,7 +435,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
                             m(Helper.getText(radioButton));
                         }
                     }
-                    Toast.makeText(getContext(), R.string.logic_editor_message_currently_used_variable, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.logic_editor_message_currently_used_variable, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 i++;
@@ -1451,8 +1451,8 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         RadioButton radioButton = new RadioButton(this);
         radioButton.setText(str);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = (int) wB.a(getContext(), 4.0f);
-        layoutParams.bottomMargin = (int) wB.a(getContext(), 4.0f);
+        layoutParams.topMargin = (int) wB.a(this, 4.0f);
+        layoutParams.bottomMargin = (int) wB.a(this, 4.0f);
         radioButton.setGravity(Gravity.CENTER | Gravity.LEFT);
         radioButton.setLayoutParams(layoutParams);
         return radioButton;
@@ -1462,8 +1462,8 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         CheckBox checkBox = new CheckBox(this);
         checkBox.setText(str);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = (int) wB.a(getContext(), 4.0f);
-        layoutParams.bottomMargin = (int) wB.a(getContext(), 4.0f);
+        layoutParams.topMargin = (int) wB.a(this, 4.0f);
+        layoutParams.bottomMargin = (int) wB.a(this, 4.0f);
         checkBox.setGravity(Gravity.CENTER | Gravity.LEFT);
         checkBox.setLayoutParams(layoutParams);
         return checkBox;
@@ -1607,10 +1607,6 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         super.finish();
     }
 
-    private Context getContext() {
-        return this;
-    }
-
     public void g(int i) {
         RelativeLayout.LayoutParams layoutParams;
         int orientation;
@@ -1624,7 +1620,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
             layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            layoutParams.topMargin = GB.a(getContext());
+            layoutParams.topMargin = GB.a((Context) this);
             orientation = LinearLayout.HORIZONTAL;
         } else {
             K.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) wB.a(this, 240.0f)));
@@ -1822,7 +1818,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
     }
 
     public void o(String str) {
-        Intent intent = new Intent(getContext(), ShowBlockCollectionActivity.class);
+        Intent intent = new Intent(this, ShowBlockCollectionActivity.class);
         intent.putExtra("block_name", str);
         startActivity(intent);
     }
@@ -1927,7 +1923,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         }
         isViewBindingEnabled = new ProjectSettings(scId).getValue(ProjectSettings.SETTING_ENABLE_VIEWBINDING, "false").equals("true");
         M = (ProjectFileBean) parcelable;
-        T = (int) wB.a(getContext(), (float) T);
+        T = (int) wB.a(this, (float) T);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v -> {
@@ -1935,8 +1931,8 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
                 onBackPressed();
             }
         });
-        G = new DB(getContext(), "P12").a("P12I0", true);
-        minDist = ViewConfiguration.get(getContext()).getScaledTouchSlop();
+        G = new DB(this, "P12").a("P12I0", true);
+        minDist = ViewConfiguration.get(this).getScaledTouchSlop();
         vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         String eventText = getIntent().getStringExtra("event_text");
         toolbar.setTitle(id.equals("_fab") ? "fab" : ReturnMoreblockManager.getMbName(id));
@@ -1993,9 +1989,9 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         if (eventName.equals("moreBlock")) {
             title = getString(R.string.root_spec_common_define) + " " + ReturnMoreblockManager.getLogicEditorTitle(jC.a(scId).b(M.getJavaName(), id));
         } else if (id.equals("_fab")) {
-            title = xB.b().a(getContext(), "fab", eventName);
+            title = xB.b().a(this, "fab", eventName);
         } else {
-            title = xB.b().a(getContext(), id, eventName);
+            title = xB.b().a(this, id, eventName);
         }
         String e1 = title;
 
@@ -2006,7 +2002,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
         for (int i = 0; i < spec.size(); i++) {
             String specBit = spec.get(i);
             if (specBit.charAt(0) == '%') {
-                Rs block = BlockUtil.getVariableBlock(getContext(), blockId + 1, specBit, "getArg");
+                Rs block = BlockUtil.getVariableBlock(this, blockId + 1, specBit, "getArg");
                 if (block != null) {
                     block.setBlockType(1);
                     o.addView(block);
@@ -2289,7 +2285,7 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
                 int[] nLocationOnScreen = new int[2];
                 viewLogicEditor.getLocationOnScreen(nLocationOnScreen);
                 int width = nLocationOnScreen[0] + (viewLogicEditor.getWidth() / 2);
-                int a2 = nLocationOnScreen[1] + ((int) wB.a(getContext(), 4.0f));
+                int a2 = nLocationOnScreen[1] + ((int) wB.a(this, 4.0f));
                 ArrayList<BlockBean> a3 = a(arrayList2, width, a2, true);
                 int[] oLocationOnScreen = new int[2];
                 o.getLocationOnScreen(oLocationOnScreen);
