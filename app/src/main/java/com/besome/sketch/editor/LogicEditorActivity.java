@@ -17,7 +17,6 @@ import android.os.Parcelable;
 import android.os.Vibrator;
 import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -2444,7 +2443,13 @@ public class LogicEditorActivity extends BaseAppCompatActivity implements View.O
     public void showSourceCode() {
         yq yq = new yq(this, scId);
         yq.a(jC.c(scId), jC.b(scId), jC.a(scId));
+
+        boolean isFragment = M.fileName.contains("_fragment");
+
         String code = new Fx(M.getActivityName(), yq.N, o.getBlocks(), isViewBindingEnabled).a();
+        code = code.replaceAll("\\$className", M.getActivityName())
+                .replaceAll("\\$context", isFragment ? "getContext()" : M.getActivityName() + ".this");
+
         var intent = new Intent(this, CodeViewerActivity.class);
         intent.putExtra("code", code);
         intent.putExtra("sc_id", scId);
