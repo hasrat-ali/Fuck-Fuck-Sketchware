@@ -1,4 +1,5 @@
 def secrets = System.getenv("GOOGLE_SERVICES_JSON")
+def swKeyPass = System.getenv("SW_KEY_PASS")
 
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
@@ -55,10 +56,10 @@ android {
 
     signingConfigs {
         debug {
-            storeFile = file("../testkey.keystore")
-            storePassword = "testkey"
-            keyAlias = "testkey"
-            keyPassword = "testkey"
+            storeFile = file("../release-key.jks")
+            storePassword = swKeyPass
+            keyAlias = "key0"
+            keyPassword = swKeyPass
         }
     }
 
