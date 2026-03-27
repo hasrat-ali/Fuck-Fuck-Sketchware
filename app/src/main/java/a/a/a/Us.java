@@ -7,13 +7,11 @@ import android.view.Gravity;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.core.content.res.ResourcesCompat;
-
 import com.besome.sketch.beans.BlockBean;
 
 import java.util.ArrayList;
 
-import bro.sketchware.R.color;
+import bro.sketchware.utility.ThemeUtils;
 
 public class Us extends Rs {
 
@@ -114,7 +112,7 @@ public class Us extends Rs {
 
         tvSpec = createSpec(super.T);
         addView(tvSpec);
-        super.e = ResourcesCompat.getColor(getResources(), color.scolor_red_02, a.getTheme());
+        super.e = ThemeUtils.getColor(tvSpec, androidx.appcompat.R.attr.colorError);
         k();
     }
 }
