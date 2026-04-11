@@ -50,7 +50,7 @@ public class BuiltInLibraries {
     public static String ANDROIDX_CREDENTIALS = "credentials-1.2.0-rc01";
     public static String ANDROIDX_CREDENTIALS_PLAY_SERVICES_AUTH = "credentials-play-services-auth-1.2.0-rc01";
     public static String ANDROIDX_CURSORADAPTER = "cursoradapter-1.0.0";
-    public static String ANDROIDX_CUSTOMVIEW = "customview-1.1.0";
+    public static String ANDROIDX_CUSTOMVIEW = "customview-1.2.0";
     public static String ANDROIDX_CUSTOMVIEW_POOLINGCONTAINER = "customview-poolingcontainer-1.0.0";
     public static String DATASTORE_ANDROID = "datastore-android-1.1.7";
     public static String DATASTORE_CORE_ANDROID = "datastore-core-android-1.1.7";
@@ -152,7 +152,7 @@ public class BuiltInLibraries {
     public static String JSPECIFY = "jspecify-1.0.0";
     public static String JSR305 = "jsr305-3.0.2";
     public static String LOTTIE = "lottie-6.7.1";
-    public static String MATERIAL = "material-1.13.0";
+    public static String MATERIAL = "material-1.14.0-beta01";
     public static String OKHTTP_ANDROID = "okhttp-android-5.3.2";
     public static String OKIO_JVM = "okio-jvm-3.16.4";
     public static String OTPVIEW = "OTPView-0.1.0";
@@ -270,7 +270,7 @@ public class BuiltInLibraries {
             new BuiltInLibrary(ANDROIDX_CURSORADAPTER, List.of(ANDROIDX_ANNOTATION_JVM)),
 
             new BuiltInLibrary(ANDROIDX_CUSTOMVIEW, List.of(ANDROIDX_ANNOTATION_JVM,
-                    ANDROIDX_COLLECTION_JVM, ANDROIDX_CORE)),
+                    ANDROIDX_COLLECTION_JVM, ANDROIDX_CORE, JSPECIFY)),
 
             new BuiltInLibrary(ANDROIDX_CUSTOMVIEW_POOLINGCONTAINER, List.of(ANDROIDX_CORE_KTX,
                     KOTLIN_STDLIB), "androidx.customview.poolingcontainer"),
@@ -644,7 +644,7 @@ public class BuiltInLibraries {
             new BuiltInLibrary(MATERIAL, List.of(ANDROIDX_ACTIVITY,
                     ANDROIDX_ANNOTATION_EXPERIMENTAL, ANDROIDX_ANNOTATION_JVM, ANDROIDX_APPCOMPAT,
                     ANDROIDX_CARDVIEW, ANDROIDX_CONSTRAINTLAYOUT, ANDROIDX_COORDINATORLAYOUT,
-                    ANDROIDX_CORE, ANDROIDX_DRAWERLAYOUT, ANDROIDX_DYNAMICANIMATION, ANDROIDX_FRAGMENT,
+                    ANDROIDX_CORE, ANDROIDX_CUSTOMVIEW, ANDROIDX_DRAWERLAYOUT, ANDROIDX_DYNAMICANIMATION, ANDROIDX_FRAGMENT,
                     ANDROIDX_GRAPHICS_SHAPES_ANDROID, LIFECYCLE_RUNTIME_ANDROID,
                     ANDROIDX_RECYCLERVIEW, ANDROIDX_TRANSITION, ANDROIDX_VECTORDRAWABLE,
                     ANDROIDX_VIEWPAGER2, ERROR_PRONE_ANNOTATIONS,
