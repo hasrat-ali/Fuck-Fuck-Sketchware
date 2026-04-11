@@ -165,7 +165,7 @@ public class BuiltInLibraries {
     public static String PLAY_SERVICES_ADS_IDENTIFIER = "play-services-ads-identifier-18.0.0";
     public static String PLAY_SERVICES_ADS_LITE = "play-services-ads-lite-20.0.0";
     public static String PLAY_SERVICES_APPSET = "play-services-appset-16.0.1";
-    public static String PLAY_SERVICES_AUTH = "play-services-auth-21.5.0";
+    public static String PLAY_SERVICES_AUTH = "play-services-auth-21.5.1";
     public static String PLAY_SERVICES_AUTH_API_PHONE = "play-services-auth-api-phone-18.0.2";
     public static String PLAY_SERVICES_AUTH_BASE = "play-services-auth-base-18.0.10";
     public static String PLAY_SERVICES_BASE = "play-services-base-18.5.0";
