@@ -5,10 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,18 +19,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import bro.sketchware.R;
+import bro.sketchware.databinding.FrManageViewListBinding;
+import bro.sketchware.databinding.ManageViewCustomListItemBinding;
 
 public class xw extends qA {
 
-    public RecyclerView f;
     public String g;
     public ArrayList<ProjectFileBean> h = new ArrayList<>();
-    public Adapter i = null;
-    public Boolean j = false;
-    public TextView k;
     public int[] l = new int[19];
+    private Adapter adapter;
+    private boolean hasSelection = false;
 
-    public final String a(int beanType, String xmlName) {
+    private FrManageViewListBinding binding;
+
+    private String a(int beanType, String xmlName) {
         String baseName = wq.b(beanType);
         StringBuilder nameBuilder = new StringBuilder();
         nameBuilder.append(baseName);
@@ -68,7 +66,7 @@ public class xw extends qA {
         }
     }
 
-    public final ArrayList<ViewBean> a(String var1, int var2) {
+    private ArrayList<ViewBean> a(String var1, int var2) {
         ArrayList<ViewBean> var3 = new ArrayList<>();
         ArrayList<ViewBean> var4;
         if (var2 != 277) {
@@ -86,7 +84,7 @@ public class xw extends qA {
 
     public void a(ProjectFileBean projectFileBean) {
         h.add(projectFileBean);
-        i.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     public void a(String fileName) {
@@ -108,15 +106,15 @@ public class xw extends qA {
 
         if (!fileAlreadyExists) {
             h.add(new ProjectFileBean(2, fileName));
-            i.notifyDataSetChanged();
+            adapter.notifyDataSetChanged();
         }
 
     }
 
     public void a(boolean var1) {
-        j = var1;
+        hasSelection = var1;
         e();
-        i.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     public void b(String var1) {
@@ -126,7 +124,7 @@ public class xw extends qA {
                 break;
             }
         }
-        i.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
     }
 
     public ArrayList<ProjectFileBean> c() {
@@ -152,7 +150,7 @@ public class xw extends qA {
         while (true) {
             int var2 = var1 - 1;
             if (var2 < 0) {
-                i.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
                 return;
             }
 
@@ -167,11 +165,11 @@ public class xw extends qA {
     public void g() {
         if (h != null) {
             if (h.isEmpty()) {
-                k.setVisibility(View.VISIBLE);
-                f.setVisibility(View.GONE);
+                binding.tvGuide.setVisibility(View.VISIBLE);
+                binding.listActivities.setVisibility(View.GONE);
             } else {
-                k.setVisibility(View.GONE);
-                f.setVisibility(View.VISIBLE);
+                binding.tvGuide.setVisibility(View.GONE);
+                binding.listActivities.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -186,14 +184,14 @@ public class xw extends qA {
             h = savedInstanceState.getParcelableArrayList("custom_views");
         }
 
-        f.getAdapter().notifyDataSetChanged();
+        binding.listActivities.getAdapter().notifyDataSetChanged();
         g();
     }
 
     @Override
     public void onActivityResult(int var1, int var2, Intent var3) {
         if ((var1 == 277 || var1 == 278) && var2 == -1) {
-            ProjectFileBean var4 = h.get(i.c);
+            ProjectFileBean var4 = h.get(adapter.layoutPosition);
             ArrayList<ViewBean> var5 = jC.a(g).d(var4.getXmlName());
 
             for (int var7 = var5.size() - 1; var7 >= 0; --var7) {
@@ -212,28 +210,27 @@ public class xw extends qA {
                 }
             }
 
-            i.notifyItemChanged(i.c);
+            adapter.notifyItemChanged(adapter.layoutPosition);
         }
 
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ViewGroup viewGroup = (ViewGroup) inflater.inflate(R.layout.fr_manage_view_list, container, false);
-        f = viewGroup.findViewById(R.id.list_activities);
-        f.setHasFixedSize(true);
-        f.setLayoutManager(new LinearLayoutManager(getContext()));
-        i = new Adapter(f);
-        f.setAdapter(i);
+        binding = FrManageViewListBinding.inflate(inflater, container, false);
+
+        binding.listActivities.setHasFixedSize(true);
+        binding.listActivities.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new Adapter(binding.listActivities);
+        binding.listActivities.setAdapter(adapter);
         if (savedInstanceState == null) {
             g = getActivity().getIntent().getStringExtra("sc_id");
         } else {
             g = savedInstanceState.getString("sc_id");
         }
 
-        k = viewGroup.findViewById(R.id.tv_guide);
-        k.setText(xB.b().a(getActivity(), R.string.design_manager_view_description_guide_create_custom_view));
-        return viewGroup;
+        binding.tvGuide.setText(xB.b().a(getActivity(), R.string.design_manager_view_description_guide_create_custom_view));
+        return binding.getRoot();
     }
 
     @Override
@@ -245,10 +242,10 @@ public class xw extends qA {
 
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
-        public int c;
+        public int layoutPosition;
 
         public Adapter(RecyclerView recyclerView) {
-            c = -1;
+            layoutPosition = -1;
             if (recyclerView.getLayoutManager() instanceof LinearLayoutManager) {
                 recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
@@ -273,86 +270,79 @@ public class xw extends qA {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            if (j) {
-                holder.x.setVisibility(View.VISIBLE);
-                holder.u.setVisibility(View.GONE);
+            ManageViewCustomListItemBinding itemBinding = holder.itemBinding;
+            if (hasSelection) {
+                itemBinding.deleteImgContainer.setVisibility(View.VISIBLE);
+                itemBinding.imgActivity.setVisibility(View.GONE);
             } else {
-                holder.x.setVisibility(View.GONE);
-                holder.u.setVisibility(View.VISIBLE);
+                itemBinding.deleteImgContainer.setVisibility(View.GONE);
+                itemBinding.imgActivity.setVisibility(View.VISIBLE);
             }
 
             ProjectFileBean fileBean = h.get(position);
-            holder.u.setImageResource(R.drawable.activity_preset_1);
-            holder.t.setChecked(fileBean.isSelected);
+            itemBinding.imgActivity.setImageResource(R.drawable.activity_preset_1);
+            itemBinding.chkSelect.setChecked(fileBean.isSelected);
             if (fileBean.fileType == 1) {
-                holder.w.setText(fileBean.getXmlName());
+                itemBinding.tvScreenName.setText(fileBean.getXmlName());
             } else if (fileBean.fileType == 2) {
-                holder.t.setVisibility(View.GONE);
-                holder.u.setImageResource(R.drawable.activity_0110);
-                holder.w.setText(fileBean.fileName.substring(1));
+                itemBinding.chkSelect.setVisibility(View.GONE);
+                itemBinding.imgActivity.setImageResource(R.drawable.activity_0110);
+                itemBinding.tvScreenName.setText(fileBean.fileName.substring(1));
             }
 
             if (fileBean.isSelected) {
-                holder.v.setImageResource(R.drawable.ic_checkmark_green_48dp);
+                itemBinding.imgDelete.setImageResource(R.drawable.ic_checkmark_green_48dp);
             } else {
-                holder.v.setImageResource(R.drawable.ic_trashcan_white_48dp);
+                itemBinding.imgDelete.setImageResource(R.drawable.ic_trashcan_white_48dp);
             }
 
         }
 
         @Override
         @NonNull
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.manage_view_custom_list_item, parent, false));
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return new ViewHolder(ManageViewCustomListItemBinding.inflate(getLayoutInflater(), parent, false));
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
 
-            public CheckBox t;
-            public ImageView u;
-            public ImageView v;
-            public TextView w;
-            public LinearLayout x;
-            public ImageView y;
+            public ManageViewCustomListItemBinding itemBinding;
 
-            public ViewHolder(View itemView) {
-                super(itemView);
-                t = itemView.findViewById(R.id.chk_select);
-                u = itemView.findViewById(R.id.img_activity);
-                w = itemView.findViewById(R.id.tv_screen_name);
-                x = itemView.findViewById(R.id.delete_img_container);
-                v = itemView.findViewById(R.id.img_delete);
-                y = itemView.findViewById(R.id.img_preset_setting);
-                t.setVisibility(View.GONE);
+            public ViewHolder(ManageViewCustomListItemBinding binding) {
+                super(binding.getRoot());
+                itemBinding = binding;
+
+                binding.chkSelect.setVisibility(View.GONE);
                 itemView.setOnClickListener(view -> {
-                    c = getLayoutPosition();
-                    if (j) {
-                        t.setChecked(!t.isChecked());
-                        h.get(c).isSelected = t.isChecked();
-                        notifyItemChanged(c);
+                    layoutPosition = getLayoutPosition();
+                    if (hasSelection) {
+                        binding.chkSelect.setChecked(!binding.chkSelect.isChecked());
+                        h.get(layoutPosition).isSelected = binding.chkSelect.isChecked();
+                        notifyItemChanged(layoutPosition);
                     }
                 });
                 itemView.setOnLongClickListener(v -> {
                     ((ManageViewActivity) getActivity()).a(true);
-                    c = getLayoutPosition();
-                    t.setChecked(!t.isChecked());
-                    h.get(c).isSelected = t.isChecked();
+                    layoutPosition = getLayoutPosition();
+                    binding.chkSelect.setChecked(!binding.chkSelect.isChecked());
+                    h.get(layoutPosition).isSelected = binding.chkSelect.isChecked();
                     return true;
                 });
-                y.setOnClickListener(view -> {
+
+                binding.imgPresetSetting.setOnClickListener(view -> {
                     if (!mB.a()) {
-                        c = getLayoutPosition();
-                        Intent var4 = new Intent(getActivity(), PresetSettingActivity.class);
+                        layoutPosition = getLayoutPosition();
+                        Intent intent = new Intent(getActivity(), PresetSettingActivity.class);
                         int requestCode;
-                        if (h.get(c).fileType == 1) {
+                        if (h.get(layoutPosition).fileType == 1) {
                             requestCode = 277;
                         } else {
                             requestCode = 278;
                         }
 
-                        var4.putExtra("request_code", requestCode);
-                        var4.putExtra("edit_mode", true);
-                        startActivityForResult(var4, requestCode);
+                        intent.putExtra("request_code", requestCode);
+                        intent.putExtra("edit_mode", true);
+                        startActivityForResult(intent, requestCode);
                     }
                 });
             }
