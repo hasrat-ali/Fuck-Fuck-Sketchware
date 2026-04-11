@@ -159,8 +159,8 @@ public class BuiltInLibraries {
     public static String OKIO_JVM = "okio-jvm-3.16.4";
     public static String OTPVIEW = "OTPView-0.1.0";
     public static String PATTERN_LOCK_VIEW = "pattern-lock-view";
-    public static String PLAY_SERVICES_ADS = "play-services-ads-24.9.0";
-    public static String PLAY_SERVICES_ADS_API = "play-services-ads-api-24.9.0";
+    public static String PLAY_SERVICES_ADS = "play-services-ads-25.1.0";
+    public static String PLAY_SERVICES_ADS_API = "play-services-ads-api-25.1.0";
     public static String PLAY_SERVICES_ADS_BASE = "play-services-ads-base-20.0.0";
     public static String PLAY_SERVICES_ADS_IDENTIFIER = "play-services-ads-identifier-18.0.0";
     public static String PLAY_SERVICES_ADS_LITE = "play-services-ads-lite-20.0.0";
