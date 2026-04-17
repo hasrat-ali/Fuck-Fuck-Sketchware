@@ -79,6 +79,18 @@ import a.a.a.wB;
 import a.a.a.wq;
 import a.a.a.yB;
 import a.a.a.zB;
+import bro.sketchware.R;
+import bro.sketchware.activities.resourceseditor.components.utils.ColorsEditorManager;
+import bro.sketchware.activities.resourceseditor.components.utils.StringsEditorManager;
+import bro.sketchware.managers.inject.InjectRootLayoutManager;
+import bro.sketchware.utility.FilePathUtil;
+import bro.sketchware.utility.FileUtil;
+import bro.sketchware.utility.InjectAttributeHandler;
+import bro.sketchware.utility.InvokeUtil;
+import bro.sketchware.utility.PropertiesUtil;
+import bro.sketchware.utility.ResourceUtil;
+import bro.sketchware.utility.SvgUtils;
+import bro.sketchware.utility.ThemeUtils;
 import dev.aldi.sayuti.editor.view.item.ItemBadgeView;
 import dev.aldi.sayuti.editor.view.item.ItemCircleImageView;
 import dev.aldi.sayuti.editor.view.item.ItemCodeView;
@@ -102,18 +114,6 @@ import mod.agus.jcoderz.editor.view.item.ItemTimePicker;
 import mod.agus.jcoderz.editor.view.item.ItemVideoView;
 import mod.bobur.VectorDrawableLoader;
 import mod.hey.studios.util.ProjectFile;
-import bro.sketchware.R;
-import bro.sketchware.activities.resourceseditor.components.utils.ColorsEditorManager;
-import bro.sketchware.activities.resourceseditor.components.utils.StringsEditorManager;
-import bro.sketchware.managers.inject.InjectRootLayoutManager;
-import bro.sketchware.utility.FilePathUtil;
-import bro.sketchware.utility.FileUtil;
-import bro.sketchware.utility.InjectAttributeHandler;
-import bro.sketchware.utility.InvokeUtil;
-import bro.sketchware.utility.PropertiesUtil;
-import bro.sketchware.utility.ResourceUtil;
-import bro.sketchware.utility.SvgUtils;
-import bro.sketchware.utility.ThemeUtils;
 
 public class ViewPane extends RelativeLayout {
     private final String stringsStart = "@string/";
@@ -493,6 +493,40 @@ public class ViewPane extends RelativeLayout {
         }
         if (viewBean.parentType == ViewBean.VIEW_TYPE_LAYOUT_RELATIVE) {
             updateRelative(view, injectHandler);
+        }
+        if (classInfo.a("WaveSideBar")) {
+            ItemWaveSideBar sidebar = (ItemWaveSideBar) view;
+            if (defaultTextColor == 0) {
+                defaultTextColor = sidebar.getTextColors().getDefaultColor();
+            }
+            if (viewBean.text.resTextColor == null) {
+                sidebar.setTextColor(
+                        viewBean.text.textColor == 0xffffff ? defaultTextColor : viewBean.text.textColor
+                );
+            } else {
+                sidebar.setTextColor(PropertiesUtil.parseColor(colorsEditorManager.getColorValue(context, viewBean.text.resTextColor, 3, material3LibraryManager.canUseNightVariantColors())));
+            }
+            sidebar.setTextSize(viewBean.text.textSize);
+
+            // Handle unique WaveSideBar attributes from inject
+            String sidebarMaxOffset = injectHandler.getAttributeValueOf("sidebar_max_offset");
+            if (!sidebarMaxOffset.isEmpty()) {
+                sidebar.setSidebarMaxOffset(PropertiesUtil.resolveSize(sidebarMaxOffset, 0));
+            }
+
+            String sidebarPosition = injectHandler.getAttributeValueOf("sidebar_position");
+            if (!sidebarPosition.isEmpty()) {
+                try {
+                    sidebar.setSidebarPosition(Integer.parseInt(sidebarPosition));
+                } catch (Exception ignored) {}
+            }
+
+            String sidebarTextAlignment = injectHandler.getAttributeValueOf("sidebar_text_alignment");
+            if (!sidebarTextAlignment.isEmpty()) {
+                try {
+                    sidebar.setSidebarTextAlignment(Integer.parseInt(sidebarTextAlignment));
+                } catch (Exception ignored) {}
+            }
         }
         if (classInfo.a("TextView")) {
             TextView textView = (TextView) view;
