@@ -534,11 +534,9 @@ public class BuiltInLibraries {
             new BuiltInLibrary(FIREBASE_ANNOTATIONS, List.of(JAVAX_INJECT)),
 
             new BuiltInLibrary(FIREBASE_APPCHECK, List.of(ANDROIDX_ANNOTATION_JVM,
-                    FIREBASE_APPCHECK_INTEROP, KOTLIN_STDLIB, PLAY_SERVICES_BASE,
-                    PLAY_SERVICES_TASKS), "com.google.firebase.appcheck"),
+                    FIREBASE_APPCHECK_INTEROP, KOTLIN_STDLIB, PLAY_SERVICES_BASE, PLAY_SERVICES_TASKS)),
 
-            new BuiltInLibrary(FIREBASE_APPCHECK_INTEROP, List.of(PLAY_SERVICES_BASE,
-                    PLAY_SERVICES_TASKS), "com.google.firebase.appcheck.interop"),
+            new BuiltInLibrary(FIREBASE_APPCHECK_INTEROP, List.of(PLAY_SERVICES_BASE, PLAY_SERVICES_TASKS)),
 
             new BuiltInLibrary(FIREBASE_AUTH, List.of(ANDROIDX_BROWSER, ANDROIDX_COLLECTION_JVM,
                     ANDROIDX_CREDENTIALS, ANDROIDX_CREDENTIALS_PLAY_SERVICES_AUTH, ANDROIDX_FRAGMENT,
